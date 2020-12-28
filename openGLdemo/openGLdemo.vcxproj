@@ -143,6 +143,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Callbacks.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="rendering\OpenGLDraw.h" />
+    <ClInclude Include="rendering\OpenGLLoader.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

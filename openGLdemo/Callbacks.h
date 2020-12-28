@@ -13,3 +13,7 @@ static void glfw_window_close_callback(GLFWwindow* window)
 	write_log("window closed");
 }
 
+static void glfw_framebuffer_size_callback(GLFWwindow* window, int w, int h)
+{
+	glViewport(0, 0, w, h);
+}
