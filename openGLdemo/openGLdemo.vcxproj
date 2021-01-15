@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="Callbacks.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="rendering\GLSLShaderLoader.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="rendering\OpenGLDraw.h" />
     <ClInclude Include="rendering\OpenGLLoader.h" />

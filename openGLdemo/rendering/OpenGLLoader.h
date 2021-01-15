@@ -26,7 +26,7 @@ static DrawDetails UploadMesh(const std::vector<Vertex>& verts, const std::vecto
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
 
-	return DrawDetails(VAO, elem.size());
+	return DrawDetails(VAO, static_cast<uint32_t>(elem.size()));
 }
 
 
