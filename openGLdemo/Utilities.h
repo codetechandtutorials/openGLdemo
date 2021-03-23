@@ -14,7 +14,7 @@ const char* extract_prog_name(const char* full)
 	return p2.c_str();
 }
 
-const char* getCurrentTime()
+const char* get_current_time()
 {
 	auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 
@@ -33,7 +33,7 @@ void write_log(const char* msg, args&&... argv)
 	std::ofstream logs;
 	logs.open("our_log.txt", std::ofstream::app | std::ofstream::out);
 	
-	logs << "[" << getCurrentTime() << "] " << msg;
+	logs << "[" << get_current_time() << "] " << msg;
 	(logs << ... << argv);
 	logs << '\n';
 	logs.close();
