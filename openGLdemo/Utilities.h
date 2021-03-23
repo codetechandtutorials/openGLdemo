@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <fstream>
+#include <chrono>
+#include <ctime>
 
 const char* extract_prog_name(const char* full)
 {
