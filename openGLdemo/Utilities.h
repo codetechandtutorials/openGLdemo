@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <fstream>
+#include <chrono>
+#include <ctime>
 
 const char* extract_prog_name(const char* full)
 {
@@ -14,16 +16,29 @@ const char* extract_prog_name(const char* full)
 	return p2.c_str();
 }
 
+std::string get_current_time()
+{
+	auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        std::string realTime = std::ctime(&now);
+	// The 25th character has a '\n' which we do not want
+        realTime[24] = NULL;
+	return realTime;
+}
+
 #ifdef _DEBUG
-void write_log(const char* msg)
+template<typename... args>
+void write_log(const char* msg, args&&... argv)
 {
 	std::ofstream logs;
 	logs.open("our_log.txt", std::ofstream::app | std::ofstream::out);
-	logs << msg << '\n';
+	logs << "[" << get_current_time() << "] " << msg;
+	(logs << ... << argv);
+	logs << '\n';
 	logs.close();
 }
 #else
-void write_log(const char* msg)
+template<typename... args>
+void write_log(const char* msg, args&&... argv)
 {
 }
 #endif
