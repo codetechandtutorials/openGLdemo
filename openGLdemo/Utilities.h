@@ -14,16 +14,33 @@ const char* extract_prog_name(const char* full)
 	return p2.c_str();
 }
 
+const char* getCurrentTime()
+{
+	auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+
+        std::string realTime = std::ctime(&now);
+
+	// The 25th character has a '\n' which we do not want so we do this
+        realTime[24] = NULL;
+
+	return realTime.c_str();
+}
+
 #ifdef _DEBUG
-void write_log(const char* msg)
+template<typename... args>
+void write_log(const char* msg, args&&... argv)
 {
 	std::ofstream logs;
 	logs.open("our_log.txt", std::ofstream::app | std::ofstream::out);
-	logs << msg << '\n';
+	
+	logs << "[" << getCurrentTime() << "] " << msg;
+	(logs << ... << argv);
+	logs << '\n';
 	logs.close();
 }
 #else
-void write_log(const char* msg)
+template<typename... args>
+void write_log(const char* msg, args&&... argv)
 {
 }
 #endif
