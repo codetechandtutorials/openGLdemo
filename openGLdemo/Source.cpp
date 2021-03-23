@@ -1,3 +1,5 @@
+// ctime is deemed not secure by MSVC so we disable warnings
+#define _CRT_SECURE_NO_WARNINGS
 #include "Callbacks.h"
 #include "Input.h"
 #include "Utilities.h"
