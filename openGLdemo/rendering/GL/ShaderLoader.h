@@ -2,7 +2,7 @@
 #include <glad/glad.h>
 #include <vector>
 
-static GLuint LoadShader(const char* vertexshader, const char* fragmentshader) {
+GLuint LoadShader(const char* vertexshader, const char* fragmentshader) {
 
 	// Create the shaders
 	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -83,11 +83,11 @@ static GLuint LoadShader(const char* vertexshader, const char* fragmentshader) {
 		printf("%s\n", &ProgramErrorMessage[0]);
 	}
 
-	glDetachShader(ProgramID, VertexShaderID);
-	glDetachShader(ProgramID, FragmentShaderID);
+	//glDeleteShader(VertexShaderID);
+	//glDeleteShader(FragmentShaderID);
 
-	glDeleteShader(VertexShaderID);
-	glDeleteShader(FragmentShaderID);
+	//glDetachShader(ProgramID, VertexShaderID);
+	//glDetachShader(ProgramID, FragmentShaderID);
 
 	return ProgramID;
 }

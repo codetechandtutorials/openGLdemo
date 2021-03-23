@@ -26,19 +26,28 @@
     <ClInclude Include="Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\OpenGLLoader.h">
+    <ClInclude Include="rendering\GL\MeshLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\OpenGLDraw.h">
+    <ClInclude Include="rendering\GL\Draw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vertex.h">
+    <ClInclude Include="rendering\GL\DrawDetails.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\GLSLShaderLoader.h">
+    <ClInclude Include="rendering\GL\ShaderLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\GL\Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\GL\Version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\GL\QueryAttribs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

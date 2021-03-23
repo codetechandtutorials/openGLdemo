@@ -2,7 +2,7 @@
 #include <string>
 #include <fstream>
 
-static const char* extract_version(const char* full)
+const char* extract_prog_name(const char* full)
 {
 	std::string p1 = full;
 	static std::string p2;
@@ -15,15 +15,15 @@ static const char* extract_version(const char* full)
 }
 
 #ifdef _DEBUG
-static void write_log(const char* msg)
+void write_log(const char* msg)
 {
 	std::ofstream logs;
 	logs.open("our_log.txt", std::ofstream::app | std::ofstream::out);
-	logs << msg;
+	logs << msg << '\n';
 	logs.close();
 }
 #else
-static void write_log(const char* msg)
+void write_log(const char* msg)
 {
 }
 #endif

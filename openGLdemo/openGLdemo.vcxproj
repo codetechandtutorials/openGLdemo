@@ -144,10 +144,13 @@
   <ItemGroup>
     <ClInclude Include="Callbacks.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="rendering\GLSLShaderLoader.h" />
-    <ClInclude Include="Vertex.h" />
-    <ClInclude Include="rendering\OpenGLDraw.h" />
-    <ClInclude Include="rendering\OpenGLLoader.h" />
+    <ClInclude Include="rendering\GL\QueryAttribs.h" />
+    <ClInclude Include="rendering\GL\ShaderLoader.h" />
+    <ClInclude Include="rendering\GL\DrawDetails.h" />
+    <ClInclude Include="rendering\GL\Draw.h" />
+    <ClInclude Include="rendering\GL\MeshLoader.h" />
+    <ClInclude Include="rendering\GL\Version.h" />
+    <ClInclude Include="rendering\GL\Vertex.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

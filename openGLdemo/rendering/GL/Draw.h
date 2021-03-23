@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
-#include "../Vertex.h"
+#include "DrawDetails.h"
 
-static void Draw(const std::vector<DrawDetails>& details)
+void Draw(const std::vector<DrawDetails>& details)
 {
 	for (const auto& d : details)
 	{
