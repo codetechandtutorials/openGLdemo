@@ -34,7 +34,7 @@ DrawDetails UploadMesh(const std::vector<Vertex>& mesh, const std::vector<GLuint
 	return DrawDetails(VAO, static_cast<uint32_t>(elem.size()));
 }
 
-static DrawDetails UploadMesh(const GLfloat* verts, const GLfloat* colors, const int v_count, 
+DrawDetails UploadMesh(const GLfloat* verts, const GLfloat* colors, const int v_count, 
 	const GLuint* elems, const int e_count)
 {
 	GLuint vboHandles[2];
@@ -76,7 +76,7 @@ static DrawDetails UploadMesh(const GLfloat* verts, const GLfloat* colors, const
 	return DrawDetails(vaoHandle, static_cast<uint32_t>(e_count));
 }
 
-static void UnloadMesh(std::vector<DrawDetails>& details)
+void UnloadMesh(std::vector<DrawDetails>& details)
 {
 	for (auto& d : details)
 	{

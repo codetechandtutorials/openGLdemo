@@ -47,8 +47,12 @@
     <ClInclude Include="rendering\GL\Version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\GL\QueryAttribs.h">
+    <ClInclude Include="rendering\GL\QueryShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GLSL\VertexShader.glsl" />
+    <None Include="GLSL\FragmentShader.glsl" />
   </ItemGroup>
 </Project>

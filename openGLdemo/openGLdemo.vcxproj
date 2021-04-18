@@ -144,7 +144,7 @@
   <ItemGroup>
     <ClInclude Include="Callbacks.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="rendering\GL\QueryAttribs.h" />
+    <ClInclude Include="rendering\GL\QueryShader.h" />
     <ClInclude Include="rendering\GL\ShaderLoader.h" />
     <ClInclude Include="rendering\GL\DrawDetails.h" />
     <ClInclude Include="rendering\GL\Draw.h" />
@@ -152,6 +152,10 @@
     <ClInclude Include="rendering\GL\Version.h" />
     <ClInclude Include="rendering\GL\Vertex.h" />
     <ClInclude Include="Utilities.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GLSL\FragmentShader.glsl" />
+    <None Include="GLSL\VertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
