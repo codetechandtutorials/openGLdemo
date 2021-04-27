@@ -144,8 +144,9 @@
   <ItemGroup>
     <ClInclude Include="Callbacks.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="rendering\GL\QueryShader.h" />
-    <ClInclude Include="rendering\GL\ShaderLoader.h" />
+    <ClInclude Include="rendering\GLSL\GLSLShader.h" />
+    <ClInclude Include="rendering\GLSL\QueryShader.h" />
+    <ClInclude Include="rendering\GLSL\ShaderLoader.h" />
     <ClInclude Include="rendering\GL\DrawDetails.h" />
     <ClInclude Include="rendering\GL\Draw.h" />
     <ClInclude Include="rendering\GL\MeshLoader.h" />
@@ -154,7 +155,9 @@
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="GLSL\2DVertexShader.glsl" />
     <None Include="GLSL\FragmentShader.glsl" />
+    <None Include="GLSL\PizzaFragShader.glsl" />
     <None Include="GLSL\VertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

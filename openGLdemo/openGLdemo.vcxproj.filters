@@ -38,7 +38,7 @@
     <ClInclude Include="Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\GL\ShaderLoader.h">
+    <ClInclude Include="rendering\GLSL\ShaderLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="rendering\GL\Vertex.h">
@@ -47,12 +47,17 @@
     <ClInclude Include="rendering\GL\Version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\GL\QueryShader.h">
+    <ClInclude Include="rendering\GLSL\QueryShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\GLSL\GLSLShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="GLSL\VertexShader.glsl" />
     <None Include="GLSL\FragmentShader.glsl" />
+    <None Include="GLSL\2DVertexShader.glsl" />
+    <None Include="GLSL\PizzaFragShader.glsl" />
   </ItemGroup>
 </Project>

@@ -38,7 +38,7 @@ const char* getTypeString(GLenum type) {
   }
 }
 
-void QueryInputAttribs(GLuint handle) {
+inline void QueryInputAttribs(const GLuint& handle) {
   printf("-----ATTRIBUTES-----\n");
   // method 1
   GLint numAttribs;
@@ -110,7 +110,7 @@ void QueryInputAttribs(GLuint handle) {
 
 }
 
-void QueryUniforms(GLuint handle) {
+inline void QueryUniforms(const GLuint& handle) {
   printf("-----UNIFORMS-----\n");
 
   GLint numUniforms = 0;
