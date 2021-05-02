@@ -58,6 +58,8 @@
     <None Include="GLSL\VertexShader.glsl" />
     <None Include="GLSL\FragmentShader.glsl" />
     <None Include="GLSL\2DVertexShader.glsl" />
-    <None Include="GLSL\PizzaFragShader.glsl" />
+    <None Include="GLSL\CursorFragShader.glsl" />
+    <None Include="GLSL\SmoothFragShader.glsl" />
+    <None Include="GLSL\BackgroundFragShader.glsl" />
   </ItemGroup>
 </Project>

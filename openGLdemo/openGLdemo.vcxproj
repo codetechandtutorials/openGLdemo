@@ -156,8 +156,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GLSL\2DVertexShader.glsl" />
+    <None Include="GLSL\BackgroundFragShader.glsl" />
     <None Include="GLSL\FragmentShader.glsl" />
-    <None Include="GLSL\PizzaFragShader.glsl" />
+    <None Include="GLSL\CursorFragShader.glsl" />
+    <None Include="GLSL\SmoothFragShader.glsl" />
     <None Include="GLSL\VertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

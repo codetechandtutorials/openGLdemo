@@ -15,7 +15,8 @@
 #include <vector>
 #include <fstream>
 
-GLSLShader* ourShader;  //<-- she's global, get to her with 'extern GLSLShader *ourShader;' delcared
+GLSLShader* cursorShader;  //<-- she's global, get to her with 'extern GLSLShader *cursorShader;' delcared
+GLSLShader* overlayerfragshader;  //<-- she's global, get to her with 'extern GLSLShader *cursorShader;' delcared
 
 int main(int argc, char** argv) {
   glfwSetErrorCallback(glfw_error_callback);
@@ -37,10 +38,17 @@ int main(int argc, char** argv) {
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
   std::string vertshader = ReadToString("..\\openGLdemo\\GLSL\\2DVertexShader.glsl");
-  std::string fragshader = ReadToString("..\\openGLdemo\\GLSL\\PizzaFragShader.glsl");
-  ourShader = new GLSLShader(vertshader.c_str(), fragshader.c_str());
-  QueryInputAttribs(ourShader->GetHandle());
-  QueryUniforms(ourShader->GetHandle());
+  std::string fragshader = ReadToString("..\\openGLdemo\\GLSL\\CursorFragShader.glsl");
+  cursorShader = new GLSLShader(vertshader.c_str(), fragshader.c_str());
+  QueryInputAttribs(cursorShader->GetHandle());
+  QueryUniforms(cursorShader->GetHandle());
+
+  fragshader = ReadToString("..\\openGLdemo\\GLSL\\SmoothFragShader.glsl");
+  overlayerfragshader = new GLSLShader(vertshader.c_str(), fragshader.c_str());
+  QueryInputAttribs(overlayerfragshader->GetHandle());
+  QueryUniforms(overlayerfragshader->GetHandle());
+  overlayerfragshader->Use();
+  overlayerfragshader->SetVec2("uResolution", glm::vec2(800,600));
 
   glClearColor(.3f, .3f, .65f, 0.f);
   std::vector<DrawDetails> ourDrawDetails;
@@ -63,16 +71,26 @@ int main(int argc, char** argv) {
 
     // HANDLE KEYPRESS
     ProcessInput(window);
+    
     glClear(GL_COLOR_BUFFER_BIT);
 
-    ourShader->Use();
+    static float accumTime = 0;
+    accumTime+=dt;
+    //cursorShader->Use();
+    //cursorShader->SetFloat("uRunTime", accumTime);
 
     //glm::mat4 finalModelMatrix = glm::mat4(1);
     //finalModelMatrix = glm::translate(finalModelMatrix, glm::vec3(sin((float)glfwGetTime()) / 2, cos((float)glfwGetTime()) / 2, 0));
     //finalModelMatrix = glm::rotate(finalModelMatrix, (float)glfwGetTime(), glm::vec3(0.f, 1.f, 0.f));
     //finalModelMatrix = glm::scale(finalModelMatrix, glm::vec3(.5));
-    //ourShader.SetMat4("uModelMatrix", finalModelMatrix);
-    //ourShader.SetVec2("uResolution", glm::vec2(2));
+    //cursorShader.SetMat4("uModelMatrix", finalModelMatrix);
+    overlayerfragshader->Use();
+
+    //overlayerfragshader->SetFloat("uRunTime", accumTime);
+    DrawStrip(drawDetails);
+
+    cursorShader->Use();
+    // mouse cursor update
     DrawStrip(drawDetails);
 
     // RENDER OUR OBJECT
