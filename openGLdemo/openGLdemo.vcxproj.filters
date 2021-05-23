@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -55,11 +55,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GLSL\VertexShader.glsl" />
-    <None Include="GLSL\FragmentShader.glsl" />
-    <None Include="GLSL\2DVertexShader.glsl" />
-    <None Include="GLSL\CursorFragShader.glsl" />
-    <None Include="GLSL\SmoothFragShader.glsl" />
-    <None Include="GLSL\BackgroundFragShader.glsl" />
+    <None Include="GLSL_src\vert_2DFlat.glsl" />
+    <None Include="GLSL_src\frag_Cursor.glsl" />
+    <None Include="GLSL_src\frag_Demo.glsl" />
+    <None Include="GLSL_src\vert_3DProjected.glsl" />
+    <None Include="GLSL_src\frag_BaseColor.glsl" />
   </ItemGroup>
 </Project>

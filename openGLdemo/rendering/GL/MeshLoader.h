@@ -138,4 +138,11 @@ void UnloadMesh(std::vector<DrawDetails>& details) {
     glDeleteBuffers(1, &d.vao);
   }
   details.clear();
+
+
+}void UnloadMesh(std::vector<DrawStripDetails>& details) {
+  for (auto& d : details) {
+    glDeleteBuffers(1, &d.vao);
+  }
+  details.clear();
 }

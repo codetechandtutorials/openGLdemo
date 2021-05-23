@@ -1,11 +1,8 @@
 #version 430
 out vec4 fragColor;
 
-//#define PI 3.14159265358979323846
-
 uniform vec2 uResolution;
-//uniform float uRunTime;
-
+uniform float uRunTime;
 
 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -24,10 +21,11 @@ float noise (in vec2 st) {
     vec2 f = fract(st);
 
     // Four corners in 2D of a tile
-    float a = random(i);
-    float b = random(i + vec2(1.0, 0.0));
-    float c = random(i + vec2(0.0, 1.0));
-    float d = random(i + vec2(1.0, 1.0));
+    float variation = sin(cos(uRunTime));
+    float a = random(i) * variation;
+    float b = random(i + vec2(1.0, 0.0)) * variation;
+    float c = random(i + vec2(0.0, 1.0)) * variation;
+    float d = random(i + vec2(1.0, 1.0)) * variation;
 
     vec2 u = f * f * (3.0 - 2.0 * f);
 

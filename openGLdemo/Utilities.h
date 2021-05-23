@@ -13,7 +13,7 @@ inline void ReadToString(const char* filepath, std::string& out) {
   out = data_stream.str();
 }
 
-inline std::string ReadToString(const char* filepath)   {
+inline std::string ReadToString(const char* filepath) {
   std::ifstream input_file_stream(filepath);
   if (!input_file_stream.is_open())
     throw("invalid file path");
@@ -41,6 +41,5 @@ inline void write_log(const char* msg) {
   logs.close();
 }
 #else
-inline void write_log(const char* msg) {
-}
+inline void write_log(const char* msg) {}
 #endif

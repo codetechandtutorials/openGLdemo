@@ -21,6 +21,18 @@ const char* getTypeString(GLenum type) {
     return "int";
   case GL_UNSIGNED_INT:
     return "unsigned int";
+
+  case GL_INT_VEC2:
+    return "ivec2";
+  case GL_INT_VEC3:
+    return "ivec3";
+  case GL_INT_VEC4:
+    return "ivec4";
+  case GL_SAMPLER_2D:
+    return "sampler 2d";
+  case GL_SAMPLER_CUBE:
+    return "sampler cube";
+
   case GL_BOOL:
     return "bool";
   case GL_FLOAT_MAT2:
@@ -33,17 +45,19 @@ const char* getTypeString(GLenum type) {
     return "true";
   case GL_FALSE:
     return "false";
+
   default:
     return "?";
   }
+
 }
 
 inline void QueryInputAttribs(const GLuint& handle) {
-  printf("-----ATTRIBUTES-----\n");
+  printf("-----ATTRIBUTES(shaderprog:%i)-----\n", handle);
   // method 1
   GLint numAttribs;
   glGetProgramInterfaceiv(handle, GL_PROGRAM_INPUT, GL_ACTIVE_RESOURCES, &numAttribs);
-  printf("Active Inputs: %i):\n", numAttribs);
+  printf("Active Inputs(%i):\n", numAttribs);
 
   GLenum properties[] = { GL_NAME_LENGTH, GL_TYPE, GL_LOCATION };
   for (int i = 0; i < numAttribs; ++i) {
@@ -56,62 +70,10 @@ inline void QueryInputAttribs(const GLuint& handle) {
     printf("%-5d %s (%s)\n", results[2], name, getTypeString(results[1]));
     delete[] name;
   }
-
-  // method 2
-  //GLint i;
-  //GLint count;
-
-  //GLint size; // size of the variable
-  //GLenum type; // type of the variable (float, vec3 or mat4, etc)
-
-  //const GLsizei bufSize = 16; // maximum name length
-  //GLchar name[bufSize]; // variable name in GLSL
-  //GLsizei length; // name length
-
-  //glGetProgramiv(handle, GL_ACTIVE_ATTRIBUTES, &count);
-  //printf("Active Attributes: %d\n", count);
-
-  //for (i = 0; i < count; i++)
-  //{
-  //	glGetActiveAttrib(handle, (GLuint)i, bufSize, &length, &size, &type, name);
-  //	printf("Attribute #%d Type: %u Name: %s\n", i, type, name);
-  //}
-
-  // method 3
-  //GLint numActiveAttribs = 0;
-  //glGetProgramInterfaceiv(handle, GL_PROGRAM_INPUT, GL_ACTIVE_RESOURCES, &numActiveAttribs);
-  //std::vector<GLchar> nameData(256);
-  //std::vector<GLenum> properties;
-  //properties.push_back(GL_NAME_LENGTH);
-  //properties.push_back(GL_TYPE);
-  //properties.push_back(GL_ARRAY_SIZE);
-  //std::vector<GLint> values(properties.size());
-  //for (int attrib = 0; attrib < numActiveAttribs; ++attrib)
-  //{
-  //	glGetProgramResourceiv(handle, GL_PROGRAM_INPUT, attrib, properties.size(),
-  //		&properties[0], values.size(), NULL, &values[0]);
-
-  //	nameData.resize(values[0]); //The length of the name.
-  //	glGetProgramResourceName(handle, GL_PROGRAM_INPUT, attrib, nameData.size(), NULL, &nameData[0]);
-  //	std::string name((char*)&nameData[0], nameData.size() - 1);
-  //	
-  //	printf("Attribute #%d Type: %u Name: %s\n", attrib, properties[attrib], name);
-  //}
-  //{
-  //	GLint active_vertex_resource;
-  //	glGetProgramInterfaceiv(handle, GL_PROGRAM_INPUT, GL_ACTIVE_VARIABLES, &active_vertex_resource);
-  //	printf("Active vertex resource count: %i\n", active_vertex_resource);
-  //}
-  //{
-  //	GLint active_output_resource_count;
-  //	glGetProgramInterfaceiv(handle, GL_PROGRAM_OUTPUT, GL_ACTIVE_RESOURCES, &active_output_resource_count);
-  //	printf("Active output resource count: %i\n", active_output_resource_count);
-  //}
-
 }
 
 inline void QueryUniforms(const GLuint& handle) {
-  printf("-----UNIFORMS-----\n");
+  printf("-----UNIFORMS(shaderprog:%i)-----\n", handle);
 
   GLint numUniforms = 0;
   glGetProgramInterfaceiv(handle, GL_UNIFORM,
@@ -120,7 +82,7 @@ inline void QueryUniforms(const GLuint& handle) {
     //  location and the block index:
   GLenum properties[] = { GL_NAME_LENGTH, GL_TYPE,
     GL_LOCATION, GL_BLOCK_INDEX };
-  printf("Active uniforms:\n");
+  printf("Active uniforms(%i):\n", numUniforms);
   for (int i = 0; i < numUniforms; ++i) {
     GLint results[4];
     glGetProgramResourceiv(handle, GL_UNIFORM, i, 4,
