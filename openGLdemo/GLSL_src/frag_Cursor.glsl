@@ -5,7 +5,6 @@ uniform float uRadius;
 // draw a 1/8 circle to terribly emulate a mouse cursor - todo(anyone): make this cooler
 void main()
 {
-  
   float color_val = 0;
 
   // skip 3 directional quadrents and part of the 4th quadrent

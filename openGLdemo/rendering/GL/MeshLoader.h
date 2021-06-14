@@ -1,8 +1,15 @@
 #pragma once
 #include <vector>
 #include "DrawDetails.h"
+#include "Vertex.h"
 #include <iostream>
 
+/// <summary>
+/// OpenGL 3.3 method (still works on 4.3+ just uses old methods) for uploading a mesh with pos and color and index buffers.
+/// </summary>
+/// <param name="mesh"></param>
+/// <param name="elem"></param>
+/// <returns>filled out DrawDetails</returns>
 DrawDetails UploadMesh(const std::vector<Vertex>& mesh, const std::vector<GLuint> elem) {
   if (mesh.empty() || elem.empty())
     throw("empty vector");
@@ -35,11 +42,11 @@ DrawDetails UploadMesh(const std::vector<Vertex>& mesh, const std::vector<GLuint
 }
 
 /// <summary>
-///  upload a mesh square mesh meant for a plane drawn as a strip
+/// OpenGL 4.3+ method to upload position only 2D mesh designed to be drawn as a strip
 /// </summary>
 /// <param name="verts"></param>
 /// <param name="v_count"></param>
-/// <returns></returns>
+/// <returns>Filled out DrawStripDetails object</returns>
 DrawStripDetails UploadMesh(const GLfloat* verts, const GLuint v_count) {
   GLuint vaoHandle;
   glGenVertexArrays(1, &vaoHandle);
@@ -55,19 +62,52 @@ DrawStripDetails UploadMesh(const GLfloat* verts, const GLuint v_count) {
   glVertexAttribFormat(0, 2, GL_FLOAT, GL_FALSE, 0);
   glVertexAttribBinding(0, 0);  // map to shader
 
-  std::cout << "draw strip:\n" << " -vao: " << vaoHandle << "\n -count: " << v_count << '\n';
+  return DrawStripDetails(vaoHandle, v_count);
+}
+
+/// <summary>
+/// OpenGL 4.3+ method to upload position+texcords 2D mesh designed to be drawn as a strip
+/// </summary>
+/// <param name="verts"></param>
+/// <param name="coords"></param>
+/// <param name="v_count"></param>
+/// <returns></returns>
+DrawStripDetails UploadMesh(const GLfloat* verts, const GLfloat* coords, const int v_count) {
+  GLuint vboHandles[2]{};
+  glGenBuffers(2, vboHandles);
+  GLuint positionBufferHandle = vboHandles[0];
+  GLuint texcoordBufferHandle = vboHandles[1];
+  glBindBuffer(GL_ARRAY_BUFFER, positionBufferHandle);
+  glBufferData(GL_ARRAY_BUFFER, v_count * sizeof(GLfloat), verts, GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, texcoordBufferHandle);
+  glBufferData(GL_ARRAY_BUFFER, v_count * sizeof(GLfloat), coords, GL_STATIC_DRAW);
+
+  GLuint vaoHandle;
+  glGenVertexArrays(1, &vaoHandle);
+  glBindVertexArray(vaoHandle);
+
+  glBindVertexBuffer(0, positionBufferHandle, 0, sizeof(GLfloat) * 2);
+  glBindVertexBuffer(1, texcoordBufferHandle, 0, sizeof(GLfloat) * 2);
+  glEnableVertexAttribArray(0);  // enable position
+  glEnableVertexAttribArray(1);  // enable texcoords
+
+  glVertexAttribFormat(0, 2, GL_FLOAT, GL_FALSE, 0);
+  glVertexAttribBinding(0, 0);  // map to shader
+
+  glVertexAttribFormat(1, 2, GL_FLOAT, GL_FALSE, 0);
+  glVertexAttribBinding(1, 1);  // map to shader
 
   return DrawStripDetails(vaoHandle, v_count);
-
 }
+
 /// <summary>
-///  intended for 2d meshes 
+/// OpenGL 4.3+ method for 2D meshes that have indices
 /// </summary>
 /// <param name="verts"></param>
 /// <param name="v_count"></param>
 /// <param name="elems"></param>
 /// <param name="e_count"></param>
-/// <returns></returns>
+/// <returns>Filled out DrawDetails</returns>
 DrawDetails UploadMesh(const GLfloat* verts, const int v_count, const GLuint* elems, const int e_count) {
   GLuint vboHandle;
   glGenBuffers(1, &vboHandle);
@@ -92,6 +132,15 @@ DrawDetails UploadMesh(const GLfloat* verts, const int v_count, const GLuint* el
   return DrawDetails(vaoHandle, static_cast<uint32_t>(e_count));
 }
 
+/// <summary>
+/// OpenGL 4.3+ method for 3D meshes that have indices
+/// </summary>
+/// <param name="verts"></param>
+/// <param name="colors"></param>
+/// <param name="v_count"></param>
+/// <param name="elems"></param>
+/// <param name="e_count"></param>
+/// <returns>Filled out DrawDetails</returns>
 DrawDetails UploadMesh(const GLfloat* verts, const GLfloat* colors, const int v_count,
   const GLuint* elems, const int e_count) {
   GLuint vboHandles[2];
@@ -133,14 +182,22 @@ DrawDetails UploadMesh(const GLfloat* verts, const GLfloat* colors, const int v_
   return DrawDetails(vaoHandle, static_cast<uint32_t>(e_count));
 }
 
+/// <summary>
+/// Unloads DrawDetails from graphics memory.
+/// </summary>
+/// <param name="details"></param>
 void UnloadMesh(std::vector<DrawDetails>& details) {
   for (auto& d : details) {
     glDeleteBuffers(1, &d.vao);
   }
   details.clear();
+}
 
-
-}void UnloadMesh(std::vector<DrawStripDetails>& details) {
+/// <summary>
+/// Unloads DrawStripDetails from graphics memory.
+/// </summary>
+/// <param name="details"></param>
+void UnloadMesh(std::vector<DrawStripDetails>& details) {
   for (auto& d : details) {
     glDeleteBuffers(1, &d.vao);
   }

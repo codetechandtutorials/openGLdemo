@@ -142,24 +142,29 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="2dGame\aabb_collide.h" />
     <ClInclude Include="Callbacks.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="2dGame\gamecode.h" />
+    <ClInclude Include="2dGame\obj.h" />
     <ClInclude Include="rendering\GLSL\GLSLShader.h" />
     <ClInclude Include="rendering\GLSL\QueryShader.h" />
     <ClInclude Include="rendering\GLSL\ShaderLoader.h" />
     <ClInclude Include="rendering\GL\DrawDetails.h" />
     <ClInclude Include="rendering\GL\Draw.h" />
     <ClInclude Include="rendering\GL\MeshLoader.h" />
+    <ClInclude Include="rendering\GL\Settings.h" />
+    <ClInclude Include="rendering\GL\TextureLoader.h" />
     <ClInclude Include="rendering\GL\Version.h" />
     <ClInclude Include="rendering\GL\Vertex.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="GLSL_src\frag_Colored.glsl" />
     <None Include="GLSL_src\vert_2DFlat.glsl" />
-    <None Include="GLSL_src\vert_3DProjected.glsl" />
-    <None Include="GLSL_src\frag_BaseColor.glsl" />
     <None Include="GLSL_src\frag_Cursor.glsl" />
     <None Include="GLSL_src\frag_Demo.glsl" />
+    <None Include="GLSL_src\vert_2DProjected.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

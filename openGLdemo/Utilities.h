@@ -4,7 +4,7 @@
 #include <sstream>
 #include <memory>
 
-inline void ReadToString(const char* filepath, std::string& out) {
+inline void ReadFileToString(const char* filepath, std::string& out) {
   std::ifstream input_file_stream(filepath);
   if (!input_file_stream.is_open())
     throw("invalid file path");
@@ -13,7 +13,7 @@ inline void ReadToString(const char* filepath, std::string& out) {
   out = data_stream.str();
 }
 
-inline std::string ReadToString(const char* filepath) {
+inline std::string ReadFileToString(const char* filepath) {
   std::ifstream input_file_stream(filepath);
   if (!input_file_stream.is_open())
     throw("invalid file path");
@@ -24,10 +24,7 @@ inline std::string ReadToString(const char* filepath) {
 
 inline const char* extract_prog_name(const char* full) {
   std::string p1 = full;
-  static std::string p2;
-  p2.clear();
-  p2 = p1.substr(
-    p1.find_last_of("/\\") + 1,  // from after last slash
+  std::string p2 = p1.substr(p1.find_last_of("/\\") + 1,  // from after last slash
     (p1.length() - p1.find_last_of("/\\")) - (p1.length() - (p1.find_last_of(".")) + 1)  // up to last dot
   );
   return p2.c_str();

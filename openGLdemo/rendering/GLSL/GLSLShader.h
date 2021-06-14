@@ -10,13 +10,14 @@ public:
     loc = -1;
     p_Handle = -1;
   }
+  ~GLSLShader() { glDeleteShader(p_Handle); }
   GLSLShader(const char* vert, const char* frag) {
     loc = -1;
     p_Handle = -1;
     p_Handle = LoadShader(vert, frag);
   }
-  
-  void Use(){
+
+  void Use() {
     glUseProgram(p_Handle);
   }
 
@@ -54,7 +55,7 @@ public:
   }
 
   GLuint GetHandle() { return p_Handle; }
-  GLuint DeleteShader() {
+  GLuint Unload() {
     glDeleteProgram(p_Handle);
     p_Handle = -1;
   }
