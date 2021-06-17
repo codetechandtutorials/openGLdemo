@@ -145,7 +145,7 @@
     <ClInclude Include="2dGame\aabb_collide.h" />
     <ClInclude Include="Callbacks.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="2dGame\gamecode.h" />
+    <ClInclude Include="2dGame\sidescroller.h" />
     <ClInclude Include="2dGame\obj.h" />
     <ClInclude Include="rendering\GLSL\GLSLShader.h" />
     <ClInclude Include="rendering\GLSL\QueryShader.h" />

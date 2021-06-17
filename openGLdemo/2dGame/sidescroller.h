@@ -3,8 +3,12 @@
 #include <GLFW/glfw3.h>
 #include "obj.h"
 #include "aabb_collide.h"
+#include <vector>
 
-namespace demo2d {
+extern const int default_window_width;
+extern const int default_window_height;
+
+namespace sidescroller {
 
 enum class GAMESTATE { PLAYING, WON, LOST };
 
@@ -46,6 +50,27 @@ void Reset() {
   gamestate = GAMESTATE::PLAYING;
 }
 
+void Setup() {
+  //prep
+  float aspect = (float)default_window_width / default_window_height;
+  float half_height = default_window_height / 2.f;  // also called ortho size
+  float half_width = half_height * aspect;
+  // setup a to draw a 2d world
+  std::string vert_code = ReadFileToString("..\\openGLdemo\\GLSL_src\\vert_2DProjected.glsl");
+  std::string frag_code = ReadFileToString("..\\openGLdemo\\GLSL_src\\frag_Colored.glsl");
+  _2d_shader = std::make_unique<GLSLShader>(vert_code.c_str(), frag_code.c_str());
+  QueryInputAttribs(_2d_shader->GetHandle());
+  QueryUniforms(_2d_shader->GetHandle());
+  _2d_shader->Use();
+  _2d_shader->SetMat4("uProjectionMatrix", glm::ortho(-half_width, half_width, -half_height, half_height, ortho_near, ortho_far));
+  //_2d_shader->SetMat4("uProjectionMatrix", glm::ortho(-1.f, 1.f, -1.f, 1.f, ortho_near, ortho_far));
+  glm::mat4 view_matrix(1);
+  view_matrix = glm::lookAt(
+    glm::vec3(-100, 100, 200),  /* eye */
+    glm::vec3(0, 0, -1),        /* target */
+    glm::vec3(0, 1, 0));        /* up */
+  _2d_shader->SetMat4("uViewMatrix", view_matrix);
+}
 
 void Update(float dt) {
   // update gamestate

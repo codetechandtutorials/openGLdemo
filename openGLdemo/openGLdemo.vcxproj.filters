@@ -59,7 +59,7 @@
     <ClInclude Include="rendering\GL\Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="2dGame\gamecode.h">
+    <ClInclude Include="2dGame\sidescroller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="2dGame\aabb_collide.h">

@@ -18,7 +18,7 @@
 #include <memory>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-#include "2dGame/gamecode.h"
+#include "2dGame/sidescroller.h"
 
 // global states, access in other source files using extern
 static std::unique_ptr<GLSLShader> cursor_shader;
@@ -58,8 +58,6 @@ int main(int argc, char** argv) {
   glfwSetFramebufferSizeCallback(window, glfw_framebuffer_size_callback);
   glfwSetCursorPosCallback(window, glfw_mouse_movement_callback);
 
-
-
   // setup a custom mouse cursor shader
   std::string vert_code = ReadFileToString("..\\openGLdemo\\GLSL_src\\vert_2DFlat.glsl");
   std::string frag_code = ReadFileToString("..\\openGLdemo\\GLSL_src\\frag_Cursor.glsl");
@@ -72,24 +70,26 @@ int main(int argc, char** argv) {
   // disable the OS mouse cursor on our applications (because we are rendering our own)
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-  //prep
-  float aspect = (float)default_window_width / default_window_height;
-  float half_height = default_window_height / 2.f; // also called ortho size
-  float half_width = half_height * aspect;
-  // setup a to draw a 2d world
-  vert_code = ReadFileToString("..\\openGLdemo\\GLSL_src\\vert_2DProjected.glsl");
-  frag_code = ReadFileToString("..\\openGLdemo\\GLSL_src\\frag_Colored.glsl");
-  _2d_shader = std::make_unique<GLSLShader>(vert_code.c_str(), frag_code.c_str());
-  QueryInputAttribs(_2d_shader->GetHandle());
-  QueryUniforms(_2d_shader->GetHandle());
-  _2d_shader->Use();
-  _2d_shader->SetMat4("uProjectionMatrix", glm::ortho(-half_width, half_width, -half_height, half_height, ortho_near, ortho_far));
-  //_2d_shader->SetMat4("uProjectionMatrix", glm::ortho(-1.f, 1.f, -1.f, 1.f, ortho_near, ortho_far));
-  glm::mat4 view_matrix(1);
-  _2d_shader->SetMat4("uViewMatrix", view_matrix);
+  sidescroller::Setup();
+
+  ////prep
+  //float aspect = (float)default_window_width / default_window_height;
+  //float half_height = default_window_height / 2.f; // also called ortho size
+  //float half_width = half_height * aspect;
+  //// setup a to draw a 2d world
+  //vert_code = ReadFileToString("..\\openGLdemo\\GLSL_src\\vert_2DProjected.glsl");
+  //frag_code = ReadFileToString("..\\openGLdemo\\GLSL_src\\frag_Colored.glsl");
+  //_2d_shader = std::make_unique<GLSLShader>(vert_code.c_str(), frag_code.c_str());
+  //QueryInputAttribs(_2d_shader->GetHandle());
+  //QueryUniforms(_2d_shader->GetHandle());
+  //_2d_shader->Use();
+  //_2d_shader->SetMat4("uProjectionMatrix", glm::ortho(-half_width, half_width, -half_height, half_height, ortho_near, ortho_far));
+  ////_2d_shader->SetMat4("uProjectionMatrix", glm::ortho(-1.f, 1.f, -1.f, 1.f, ortho_near, ortho_far));
+  //glm::mat4 view_matrix(1);
+  //_2d_shader->SetMat4("uViewMatrix", view_matrix);
 
   glfwMaximizeWindow(window);
-   
+
   std::vector<DrawDetails> ourDrawDetails;
   std::vector<DrawStripDetails> ourDrawStripDetails;
   const GLfloat planeData[] = {
@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
     // HANDLE KEYPRESS
     ProcessInput(window);
 
-    demo2d::PlayerControls(window);
+    sidescroller::PlayerControls(window);
 
     double current_time = glfwGetTime();
     double dt = current_time - prev_time;
@@ -120,12 +120,12 @@ int main(int argc, char** argv) {
     static double accumTime = 0;
     accumTime += dt;
 
-    demo2d::Update(dt);
+    sidescroller::Update(dt);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     _2d_shader->Use();
-    demo2d::Render(ourDrawStripDetails);
+    sidescroller::Render(ourDrawStripDetails);
 
     // mouse cursor draw
     cursor_shader->Use();
