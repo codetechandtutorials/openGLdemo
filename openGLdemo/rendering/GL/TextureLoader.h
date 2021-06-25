@@ -1,7 +1,7 @@
 #pragma once
 #include <glad/glad.h>
 
-GLuint UploadTexture(const GLuint width, const GLuint height, const GLubyte* tex_data) {
+GLuint UploadTexture(const GLuint width, const GLuint height, const GLubyte* tex_data, bool hasAlpha) {
   unsigned int out_texID = 0;
 
   glGenTextures(1, &out_texID);
@@ -14,8 +14,11 @@ GLuint UploadTexture(const GLuint width, const GLuint height, const GLubyte* tex
 
   //try: https://stackoverflow.com/questions/23150123/loading-png-with-stb-image-for-opengl-texture-gives-wrong-colors
   //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_data);
+  if (hasAlpha)
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_data);
+  else
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_data);
+  
   glGenerateMipmap(GL_TEXTURE_2D);
 
   glBindTexture(GL_TEXTURE_2D, 0);
