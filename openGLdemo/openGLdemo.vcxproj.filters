@@ -68,6 +68,9 @@
     <ClInclude Include="2dGame\obj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="cursor\cursor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="GLSL_src\vert_2DFlat.glsl" />

@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="2dGame\aabb_collide.h" />
     <ClInclude Include="Callbacks.h" />
+    <ClInclude Include="cursor\cursor.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="2dGame\sidescroller.h" />
     <ClInclude Include="2dGame\obj.h" />

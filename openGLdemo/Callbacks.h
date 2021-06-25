@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "rendering/GLSL/GLSLShader.h"
+#include "cursor/cursor.h"
 #include <memory>
 #include <iostream>
 
@@ -55,12 +56,5 @@ void glfw_framebuffer_size_callback(GLFWwindow* window, int w, int h) {
 }
 
 void glfw_mouse_movement_callback(GLFWwindow* window, double x, double y) {
-  int width, height;
-  glfwGetWindowSize(window, &width, &height);
-  cursor_shader->Use();
-#if _DEBUG
-  printf("mouse pos: %f, %f\n", x, y);
-  printf("to ogl screen space mouse pos: %f, %f\n", x, height - y);
-#endif
-  cursor_shader->SetVec2("uMousePos", glm::vec2(x, height - y));
+  cursor::Update(x, y);
 }
