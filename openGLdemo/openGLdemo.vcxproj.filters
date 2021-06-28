@@ -78,5 +78,6 @@
     <None Include="GLSL_src\frag_Demo.glsl" />
     <None Include="GLSL_src\vert_2DProjected.glsl" />
     <None Include="GLSL_src\frag_Colored.glsl" />
+    <None Include="GLSL_src\frag_Textured.glsl" />
   </ItemGroup>
 </Project>

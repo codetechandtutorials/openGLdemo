@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GLSL_src\frag_Colored.glsl" />
+    <None Include="GLSL_src\frag_Textured.glsl" />
     <None Include="GLSL_src\vert_2DFlat.glsl" />
     <None Include="GLSL_src\frag_Cursor.glsl" />
     <None Include="GLSL_src\frag_Demo.glsl" />

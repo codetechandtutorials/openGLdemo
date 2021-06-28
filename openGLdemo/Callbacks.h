@@ -16,8 +16,6 @@ extern float perspective_near;
 extern float perspective_far;
 extern float ortho_near;
 extern float ortho_far;
-extern int last_vpwidth;
-extern int last_vpheight;
 
 void glfw_error_callback(int error, const char* description) {
   write_log(description);
@@ -29,18 +27,16 @@ void glfw_window_close_callback(GLFWwindow* window) {
 }
 
 void glfw_framebuffer_size_callback(GLFWwindow* window, int w, int h) {
+
   std::string the_log = "window size changed to: " + std::to_string(w) + "x" + std::to_string(h);
   write_log(the_log.c_str());
+
   _2d_shader->Use();
-  float ASPECT_RATIO = (float)w/(float)h;
-  _2d_shader->SetMat4("uProjectionMatrix", glm::perspective(perspective_fov, ASPECT_RATIO, perspective_near, perspective_far));
-  //_2d_shader->SetVec2("uResolution", glm::vec2(w, h));
-
-  float aspect = (float)w/h;
-  //std::cout << "aspect ratio: " << aspect << std::endl;
+  float aspect_ratio = (float)w/h;
+  //_2d_shader->SetMat4("uProjectionMatrix", glm::perspective(perspective_fov, aspect_ratio, perspective_near, perspective_far));
+  
   float half_height = h / 2.f; // also called ortho size
-  float half_width = half_height * aspect;
-
+  float half_width = half_height * aspect_ratio;
   _2d_shader->SetMat4("uProjectionMatrix", glm::ortho(
     -half_width,
     half_width,
@@ -49,10 +45,7 @@ void glfw_framebuffer_size_callback(GLFWwindow* window, int w, int h) {
     ortho_near,
     ortho_far));
 
-
   glViewport(0, 0, w, h);
-  last_vpwidth = w;
-  last_vpheight = h;
 }
 
 void glfw_mouse_movement_callback(GLFWwindow* window, double x, double y) {

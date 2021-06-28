@@ -3,37 +3,41 @@
 #include <GLFW/glfw3.h>
 #include "obj.h"
 #include "aabb_collide.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 #include <vector>
 
 extern const int default_window_width;
 extern const int default_window_height;
 
+static std::unique_ptr<GLSLShader> _2d_shader;
+int tex1_id;
+
 namespace sidescroller {
 
-enum class GAMESTATE { PLAYING, WON, LOST };
-
-GAMESTATE gamestate = GAMESTATE::PLAYING;
+enum class GAMESTATE { PLAYING, WON, LOST } gamestate;
 
 struct Player {
-  float speed;
-  float jump_power;
-  obj body;
-  bool left = false, right = false, jump = false;
+  float speed = 165.f;
+  float jump_power = 140.f;
+  obj body = { glm::vec3(-475, -225, -1), glm::vec3(15,15,1) };
+  bool left = false, right = false, jumping = false;
   bool falling = true;
-};
+} player;
 
 // assets
 std::vector<obj> objects = {
-  { glm::vec3(-400, -300, -1), glm::vec3(100,50,1), glm::vec3(.4f) },
-  { glm::vec3(-200, -300, -1), glm::vec3(100,50,1), glm::vec3(.4f) },
-  { glm::vec3(0,   -200, -1), glm::vec3(100, 10,1), glm::vec3(.55f) },
-  { glm::vec3(200, -300, -1), glm::vec3(100, 50,1), glm::vec3(.4f) },
-  { glm::vec3(400, -300, -1), glm::vec3(100, 50,1), glm::vec3(.4f) }
+  /* location */                /* scale */
+  { glm::vec3(-600, -200, -1), glm::vec3(25,25,1)},
+  { glm::vec3(-400, -300, -1), glm::vec3(100,50,1)},
+  { glm::vec3(-200, -300, -1), glm::vec3(100,50,1)},
+  { glm::vec3(0,   -200, -1), glm::vec3(100, 10,1)},
+  { glm::vec3(200, -300, -1), glm::vec3(100, 50,1)},
+  { glm::vec3(400, -300, -1), glm::vec3(100, 50,1)}
 };
 
-Player player = { 165.f, 140.f, glm::vec3(-475, -225, -1), glm::vec3(15,15,1), glm::vec3(.3, .3, .75) };
-
-obj goal = { glm::vec3(475, -225, -1), glm::vec3(5,5,1), glm::vec3(.3, .8, .3) };
+obj goal = { glm::vec3(475, -225, -1), glm::vec3(5,5,1) };
 
 std::vector<obj> lost_display = {
   { glm::vec3(0, 0, -1), glm::vec3(25, 100,1), glm::vec3(.7f,.0f, .1f), glm::vec3(0, 0, glm::radians(45.f)) },
@@ -41,8 +45,8 @@ std::vector<obj> lost_display = {
 };
 
 std::vector<obj> won_display = {
-  { glm::vec3(-81, -25, -1), glm::vec3(25, 50,1), glm::vec3(.0f, .7f, .1f), glm::vec3(0, 0, glm::radians(45.f)) },
-  { glm::vec3(0, 0, -1), glm::vec3(25, 100,1), glm::vec3(.0f, .7f, .1f), glm::vec3(0, 0, glm::radians(-45.f)) }
+  { glm::vec3(-81, -25, -1), glm::vec3(25, 50,1), glm::vec3(0), glm::vec3(0, 0, glm::radians(45.f)) },
+  { glm::vec3(0, 0, -1), glm::vec3(25, 100,1), glm::vec3(0), glm::vec3(0, 0, glm::radians(-45.f)) }
 };
 
 void Reset() {
@@ -57,24 +61,30 @@ void Setup() {
   float half_width = half_height * aspect;
   // setup a to draw a 2d world
   std::string vert_code = ReadFileToString("..\\openGLdemo\\GLSL_src\\vert_2DProjected.glsl");
-  std::string frag_code = ReadFileToString("..\\openGLdemo\\GLSL_src\\frag_Colored.glsl");
+  std::string frag_code = ReadFileToString("..\\openGLdemo\\GLSL_src\\frag_Textured.glsl");
   _2d_shader = std::make_unique<GLSLShader>(vert_code.c_str(), frag_code.c_str());
   QueryInputAttribs(_2d_shader->GetHandle());
   QueryUniforms(_2d_shader->GetHandle());
   _2d_shader->Use();
   _2d_shader->SetMat4("uProjectionMatrix", glm::ortho(-half_width, half_width, -half_height, half_height, ortho_near, ortho_far));
-  //_2d_shader->SetMat4("uProjectionMatrix", glm::ortho(-1.f, 1.f, -1.f, 1.f, ortho_near, ortho_far));
   glm::mat4 view_matrix(1);
-  view_matrix = glm::lookAt(
-    glm::vec3(-100, 100, 200),  /* eye */
-    glm::vec3(0, 0, -1),        /* target */
-    glm::vec3(0, 1, 0));        /* up */
+  //view_matrix = glm::lookAt(
+  //  glm::vec3(-100, 100, 200),  /* eye */
+  //  glm::vec3(0, 0, -1),        /* target */
+  //  glm::vec3(0, 1, 0));        /* up */
   _2d_shader->SetMat4("uViewMatrix", view_matrix);
+
+  //upload texture
+  std::string texture1 = "..\\resources\\demo_bars.png";
+  int w, h, comp;
+  unsigned char* image = stbi_load(texture1.c_str(), &w, &h, &comp, STBI_rgb_alpha);
+  tex1_id = UploadTexture(w, h, image, true);
+  stbi_image_free(image);
 }
 
 void Update(float dt) {
   // update gamestate
-  const float end_display_length = 3.f;
+  static const float end_display_length = 1.2f;
   static float end_display_timer = 0.f;
   switch (gamestate) {
   case GAMESTATE::PLAYING:
@@ -94,7 +104,7 @@ void Update(float dt) {
 
   // jump logic
   static float jump_timer = 0.f;
-  if (player.jump && !player.falling) {
+  if (player.jumping && !player.falling) {
     jump_timer += dt;
     if (jump_timer < .6f) {
       player.body.location.y += player.jump_power * dt;
@@ -129,12 +139,11 @@ void Update(float dt) {
 
 
   // check for new collisions
-  if (player.left || player.right || player.jump || player.falling) {
+  if (player.left || player.right || player.jumping || player.falling) {
 
     // check grounding
     bool on_something = false;
-    if (!player.jump && !player.falling && (player.left || player.right))
-    {
+    if (!player.jumping && !player.falling && (player.left || player.right)) {
       obj feet = player.body;
       feet.location.y -= last_fall_velocity;
       for (const auto& o : objects) {
@@ -142,7 +151,7 @@ void Update(float dt) {
           on_something = true;
         }
       }
-      if (!on_something && !player.jump) {
+      if (!on_something && !player.jumping) {
         player.falling = true;
       }
     }
@@ -195,13 +204,13 @@ void PlayerControls(GLFWwindow* window) {
   }
 
   if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-    if (!player.jump) {
-      player.jump = true;
+    if (!player.jumping) {
+      player.jumping = true;
     }
   }
   if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE) {
-    if (player.jump) {
-      player.jump = false;
+    if (player.jumping) {
+      player.jumping = false;
       if (!player.falling)
         player.falling = true;
     }
@@ -210,35 +219,41 @@ void PlayerControls(GLFWwindow* window) {
 
 // draw game stuff
 void Render(const std::vector<DrawStripDetails>& drawdetails) {
+
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, tex1_id);
+  _2d_shader->Use();
+  _2d_shader->SetInt("uTexture", 0);
+
   switch (gamestate) {
   case GAMESTATE::PLAYING:
+    // draw base objects
     for (const auto& ob : objects) {
       _2d_shader->SetMat4("uModelMatrix", glm::scale(glm::translate(glm::mat4(1), ob.location), ob.scale));
-      _2d_shader->SetVec3("uColor", ob.color);
       DrawStrip(drawdetails);
     }
 
+    // draw player
     _2d_shader->SetMat4("uModelMatrix", glm::scale(glm::translate(glm::mat4(1), player.body.location), player.body.scale));
-    _2d_shader->SetVec3("uColor", player.body.color);
     DrawStrip(drawdetails);
-
+    
+    // draw goal
     _2d_shader->SetMat4("uModelMatrix", glm::scale(glm::translate(glm::mat4(1), goal.location), goal.scale));
-    _2d_shader->SetVec3("uColor", goal.color);
     DrawStrip(drawdetails);
     break;
 
   case GAMESTATE::WON:
+    // draw check mark (made out of 2 rectangles)
     for (const auto& wi : won_display) {
       _2d_shader->SetMat4("uModelMatrix", glm::scale(glm::rotate(glm::translate(glm::mat4(1), wi.location), wi.rotation.z, glm::vec3(0, 0, 1)), wi.scale));
-      _2d_shader->SetVec3("uColor", wi.color);
       DrawStrip(drawdetails);
     }
     break;
 
   case GAMESTATE::LOST:
+    // draw X (made out of 2 rectangles)
     for (const auto& lo : lost_display) {
       _2d_shader->SetMat4("uModelMatrix", glm::scale(glm::rotate(glm::translate(glm::mat4(1), lo.location), lo.rotation.z, glm::vec3(0, 0, 1)), lo.scale));
-      _2d_shader->SetVec3("uColor", lo.color);
       DrawStrip(drawdetails);
     }
     break;
